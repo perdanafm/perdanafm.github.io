@@ -12,17 +12,22 @@ function App() {
   const containerRef = useRef(null);
   const counterRef = useRef(null);
 
-  // Initialize theme based on user preference
+  // Initialize theme: localStorage > dark default
   useEffect(() => {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setIsDark(prefersDark);
-    if (prefersDark) {
+    const stored = localStorage.getItem('theme');
+    const dark = stored ? stored === 'dark' : true;
+    setIsDark(dark);
+    if (dark) {
       document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 
   const toggleTheme = () => {
-    setIsDark(!isDark);
+    const next = !isDark;
+    setIsDark(next);
+    localStorage.setItem('theme', next ? 'dark' : 'light');
     document.documentElement.classList.toggle('dark');
   };
 
